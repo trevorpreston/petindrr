@@ -21,12 +21,20 @@ const SearchStack = createStackNavigator(
 
 SearchStack.path = '';
 
+SearchStack.navigationOptions = {
+  tabBarLabel: 'Search',
+};
+
 const SavedStack = createStackNavigator(
   {
     Saved: SavedScreen,
   },
   config
 );
+
+SavedStack.navigationOptions = {
+  tabBarLabel: 'Saved',
+};
 
 
 SavedStack.path = '';
@@ -39,6 +47,10 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.path = '';
+
+SettingsStack.navigationOptions = {
+  tabBarLabel: 'Settings',
+};
 
 const tabNavigator = createBottomTabNavigator({
   SearchStack,
