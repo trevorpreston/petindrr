@@ -4,23 +4,30 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 
 import axios from 'axios';
 import axiosMiddleware from 'redux-axios-middleware';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 
 import { Provider, connect } from 'react-redux';
 
 import AppNavigator from './navigation/AppNavigator';
 
-import reducer from './reducer';
+import userReducer from './reducers/userReducer';
+import petReducer from './reducers/petReducer'
 
 const client = axios.create({
   baseURL: 'http://localhost:19002/',
   responseType: 'json'
 });
 
+const allReducers = combineReducers({
+  user: userReducer, 
+  pet: petReducer
+})
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
-  reducer,
+  allReducers,
+  {},
   composeEnhancers(applyMiddleware(axiosMiddleware(client)))
 );
  

@@ -1,4 +1,15 @@
-export default function reducer(state = {}, action) {
+const initialState = {
+  userSettings: {
+    profile: 'hiii',
+    typePreference: '',
+    ageRange: {
+      min: 0,
+      max: 0
+    }
+  }
+}
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case 'FETCH_INITIAL_SETTINGS':
       return { ...state, loading: true };
