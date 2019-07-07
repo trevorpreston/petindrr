@@ -40,6 +40,14 @@ export default function reducer(state = {}, action) {
             }
           }
         }
+    case 'TOGGLE_TYPE_PREFERENCE':
+        return {
+          ...state,
+          userSettings: {
+            ...state.userSettings,
+            typePreference: action.payload
+          }
+        }
     default:
       return state;
   }
@@ -74,6 +82,13 @@ export function updateMinAge(value) {
 export function updateMaxAge(value) {
   return {
     type: 'UPDATE_MAX_AGE',
+    payload: value
+  }
+}
+
+export function togglePetPreference(value) {
+  return {
+    type: 'TOGGLE_TYPE_PREFERENCE',
     payload: value
   }
 }

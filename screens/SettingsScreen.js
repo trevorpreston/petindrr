@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { Text, ScrollView, View, TextInput, Switch} from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchInitialSettings, updateProfile, updateMinAge, updateMaxAge } from '../reducer';
+import { fetchInitialSettings, updateProfile, updateMinAge, updateMaxAge, togglePetPreference } from '../reducer';
 
 
 class SettingsScreen extends Component {
   componentDidMount() {
     this.props.fetchInitialSettings()
     console.log('hi', this.props.userSettings)
+  }
+
+  togglePetPreference(value) {
+    // value === 'false' ? 
   }
 
   render() {
@@ -24,6 +28,8 @@ class SettingsScreen extends Component {
           <Text>Preferences</Text>
           <Text>Cat</Text>
           <Switch
+            value={this.props.userSettings && this.props.userSettings.typePreference === 'dog' ? true: false}
+            onValueChange={(val) => { val === true ? this.props.togglePetPreference('dog') : this.props.togglePetPreference('cat')}}
             disabled={false}
           />
           <Text>Dog</Text>
@@ -62,7 +68,9 @@ const mapDispatchToProps = dispatch => ({
   fetchInitialSettings: () => dispatch(fetchInitialSettings()),
   updateProfile: val => dispatch(updateProfile(val)),
   updateMinAge: val => dispatch(updateMinAge(val)),
-  updateMaxAge: val => dispatch(updateMaxAge(val))
+  updateMaxAge: val => dispatch(updateMaxAge(val)),
+  togglePetPreference: val => dispatch(togglePetPreference(val))
+
 });
 
 
