@@ -1,15 +1,37 @@
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+
+import axios from 'axios';
+import axiosMiddleware from 'redux-axios-middleware';
+import { createStore, applyMiddleware, compose } from 'redux';
+
+import { Provider, connect } from 'react-redux';
 
 import AppNavigator from './navigation/AppNavigator';
 
+import reducer from './reducer';
+
+const client = axios.create({
+  baseURL: 'http://localhost:19002/',
+  responseType: 'json'
+});
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  reducer,
+  composeEnhancers(applyMiddleware(axiosMiddleware(client)))
+);
+ 
+
 export default function App(props) {
   return (
-    <View style={styles.container}>
-      <AppNavigator />
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <AppNavigator />
+      </View>
+    </Provider>
   );
 }
 
