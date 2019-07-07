@@ -2,20 +2,13 @@ import React, { Component } from 'react';
 import { Text, ScrollView, View, TextInput, Switch} from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchInitialSettings, updateProfile } from '../reducer';
+import { fetchInitialSettings, updateProfile, updateMinAge, updateMaxAge } from '../reducer';
 
 
 class SettingsScreen extends Component {
   componentDidMount() {
     this.props.fetchInitialSettings()
-    console.log('TEST')
-    console.log(this.props.userSettings)
-  }
-
-  updateProfile(text) {
-    console.log(text)
-
-    this.props.updateProfile(text)
+    console.log('hi', this.props.userSettings)
   }
 
   render() {
@@ -27,7 +20,7 @@ class SettingsScreen extends Component {
             value={this.props.userSettings && this.props.userSettings.profile }
             editable={true}
             multiline={true}
-            onChangeText={text => this.updateProfile(text)}/>
+            onChangeText={text => this.props.updateProfile(text)}/>
           <Text>Preferences</Text>
           <Text>Cat</Text>
           <Switch
@@ -35,12 +28,23 @@ class SettingsScreen extends Component {
           />
           <Text>Dog</Text>
           <Text>Age</Text>
-          <TextInput 
-          style={{height: 40, width: 50, borderColor: 'gray', borderWidth: 1}}/>
-          <TextInput style={{height: 40, width: 50, borderColor: 'gray', borderWidth: 1}} />
+          <TextInput
+            value={this.props.userSettings && this.props.userSettings.ageRange.min.toString()}
+            style={{height: 40, width: 50, borderColor: 'gray', borderWidth: 1}}
+            editable={true}
+            onChangeText={text => this.props.updateMinAge(text)}
+            onBlur={() => {this.props.userSettings && this.props.userSettings.ageRange.min === '' && this.props.updateMinAge(0)}}
+            keyboardType={'numeric'}
+            />
+          <TextInput
+            value={this.props.userSettings && this.props.userSettings.ageRange.max.toString()}
+            style={{height: 40, width: 50, borderColor: 'gray', borderWidth: 1}}
+            editable={true}
+            onChangeText={text => this.props.updateMaxAge(text)}
+            onBlur={() => {this.props.userSettings && this.props.userSettings.ageRange.max === '' && this.props.updateMaxAge(0)}}
+            keyboardType={'numeric'}
+            />
         </View>
-        {/* <Text>{JSON.stringify(this.props.userSettings)}</Text> */}
-
       </ScrollView>
     )
   }
@@ -56,7 +60,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   fetchInitialSettings: () => dispatch(fetchInitialSettings()),
-  updateProfile: (val) => dispatch(updateProfile(val))
+  updateProfile: val => dispatch(updateProfile(val)),
+  updateMinAge: val => dispatch(updateMinAge(val)),
+  updateMaxAge: val => dispatch(updateMaxAge(val))
 });
 
 
