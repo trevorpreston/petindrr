@@ -8,7 +8,6 @@ import { fetchInitialSettings, updateProfile, updateMinAge, updateMaxAge, toggle
 class SettingsScreen extends Component {
   componentDidMount() {
     this.props.fetchInitialSettings()
-    console.log('****', this.props)
   }
 
   render() {

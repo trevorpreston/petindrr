@@ -1,9 +1,13 @@
-export default (state = [], action) => {
+const initialState = {
+  pets: []
+}
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case 'FETCH_INITIAL_PETS':
         return { ...state, loading: true };
       case 'FETCH_INITIAL_PETS_SUCCESS':
-        return { ...state, loading: false, pet: action.payload.data };
+        return { ...state, loading: false, pets: action.payload.data };
       case 'FETCH_INITIAL_PETS_FAIL':
         return {
           ...state,
