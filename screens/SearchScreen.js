@@ -26,9 +26,19 @@ export class SearchScreen extends Component {
       },
       ...this.position.getTranslateTransform()
       ]
-   }
+    }
 
-    this.renderCards = this.renderCards.bind(this);
+    this.nextCardOpacity = this.position.x.interpolate({
+      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+      outputRange: [1, 0, 1],
+      extrapolate: 'clamp'
+   })
+
+    this.nextCardScale = this.position.x.interpolate({
+      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+      outputRange: [1, 0.8, 1],
+      extrapolate: 'clamp'
+    })
   }
 
   componentDidMount() {
@@ -42,7 +52,8 @@ export class SearchScreen extends Component {
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dx > 120) {
           Animated.spring(this.position, {
-            toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
+            toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
+            speed: 30
           }).start(() => {
             this.savePet(this.props.pets[this.state.currentIndex]);
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
@@ -51,7 +62,8 @@ export class SearchScreen extends Component {
           })
         } else if (gestureState.dx < -120) {
           Animated.spring(this.position, {
-            toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy }
+            toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
+            speed: 30
           }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
@@ -60,7 +72,7 @@ export class SearchScreen extends Component {
         } else {
           Animated.spring(this.position, {
              toValue: { x: 0, y: 0 },
-             friction: 4
+             speed: 30
              }).start()
           }
       }})
@@ -80,23 +92,18 @@ export class SearchScreen extends Component {
     const existingSaved = await AsyncStorage.getItem('saved');
     let newSaved = JSON.parse(existingSaved);
 
-    console.log(newSaved)
-    console.log('new save', newSave)
     if( !newSaved ){
       newSaved = [];
     }
     
     if (newSaved.filter(pet => pet.id === newSave.id).length === 0) {
       newSaved.push(newSave)
-      console.log('saving updated to ', JSON.stringify(newSaved))
     }
 
     await AsyncStorage.setItem('saved', JSON.stringify(newSaved) )
       .then( ()=>{
-      console.log('It was saved successfully')
       } )
       .catch( ()=>{
-      console.log('There was an error saving the product')
       } )
   }
 
@@ -126,10 +133,9 @@ export class SearchScreen extends Component {
               }
             ]}
           >
-            <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={{uri: item.img}} />
-            
+          <Image
+              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+              source={{uri: item.img}} />
         </Animated.View>
     )
   }
@@ -138,12 +144,11 @@ export class SearchScreen extends Component {
     return (
     <Animated.View
       key={key}
-      style={{
-        height: SCREEN_HEIGHT - 120,
-        width: SCREEN_WIDTH,
-        padding: 10,
-        position: "absolute"
-      }}
+      style={[{
+        opacity: this.nextCardOpacity,
+        transform: [{ scale: this.nextCardScale }],
+        height: SCREEN_HEIGHT - 120, width: SCREEN_WIDTH, padding: 10, position: 'absolute'
+        }]}
     >
       <Image
         style={{
