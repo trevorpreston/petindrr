@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Text, ScrollView, View, StyleSheet, Animated, Dimensions, Image, PanResponder } from 'react-native';
+import { View, StyleSheet, Animated, Dimensions, Image, PanResponder, AsyncStorage } from 'react-native';
 
 import { connect } from 'react-redux';
 import { fetchInitialPets } from '../reducers/petReducer';
-
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -33,8 +32,8 @@ export class SearchScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchInitialPets()
-    console.log(this.props)
+    this.props.fetchInitialPets();
+    this.clearSaved();
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
@@ -45,6 +44,7 @@ export class SearchScreen extends Component {
           Animated.spring(this.position, {
             toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
           }).start(() => {
+            this.savePet(this.props.pets[this.state.currentIndex]);
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
             })
@@ -64,12 +64,43 @@ export class SearchScreen extends Component {
              }).start()
           }
       }})
+  }
 
-    console.log('PAN PAN', this.PanResponder.panHandlers)
+  async clearSaved() {
+    try {
+      await AsyncStorage.removeItem('saved');
+      return true;
+    }
+    catch(exception) {
+      return false;
+    }
+  }
+
+  async savePet(newSave) {
+    const existingSaved = await AsyncStorage.getItem('saved');
+    let newSaved = JSON.parse(existingSaved);
+
+    console.log(newSaved)
+    console.log('new save', newSave)
+    if( !newSaved ){
+      newSaved = [];
+    }
+    
+    if (newSaved.filter(pet => pet.id === newSave.id).length === 0) {
+      newSaved.push(newSave)
+      console.log('saving updated to ', JSON.stringify(newSaved))
+    }
+
+    await AsyncStorage.setItem('saved', JSON.stringify(newSaved) )
+      .then( ()=>{
+      console.log('It was saved successfully')
+      } )
+      .catch( ()=>{
+      console.log('There was an error saving the product')
+      } )
   }
 
   renderCards(pets) {
-    console.log('pets is!', pets)
     return pets.map( (pet, key) => {
       if (key < this.state.currentIndex) {
         return null;
@@ -83,7 +114,6 @@ export class SearchScreen extends Component {
 
   renderDynamicCard(item, key) {
     return (
-      // {{uri: item.img}}
         <Animated.View
             {...this.PanResponder.panHandlers}
             key={key}
@@ -99,6 +129,7 @@ export class SearchScreen extends Component {
             <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
                 source={{uri: item.img}} />
+            
         </Animated.View>
     )
   }
