@@ -60,11 +60,14 @@ class SavedScreen extends Component {
           <TouchableHighlight 
             key={i} 
             onPress={() => this.updateModal(true, i)}
-            underlayColor='white'>
-            <View>
-              <Image source={{uri: save.img}} style={{height: 200, width: 200}}/>
-              <Text>{save.name} , {save.age} yr, {save.sex}</Text>
-              <Text numberOfLines={2}>{save.profile}</Text>
+            style={styles.savedCard}
+            >
+            <View style={styles.cardContent}>
+              <Image source={{uri: save.img}} style={styles.thumbnail}/>
+              <View style={styles.petInfo}>
+                <Text style={styles.petHeader}>{save.name} , {save.age} yr, {save.sex}</Text>
+                <Text numberOfLines={2}>{save.profile}</Text>
+              </View>
             </View>
           </TouchableHighlight>
         )
@@ -89,6 +92,34 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+
+  savedCard: {
+    backgroundColor: '#e6e6e6',
+    padding: 5,
+    margin: 5
+  },
+
+  thumbnail: {
+    height: 100,
+    width: 100
+  },
+
+  cardContent: {
+    flexDirection: 'row'
+  },
+
+  petInfo: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 5,
+    fontSize: 12,
+    flexDirection: 'column',
+    justifyContent: 'space-around'
+  },
+
+  petHeader: {
+    fontSize: 20
+  }
 });
 
 

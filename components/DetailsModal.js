@@ -9,7 +9,6 @@ export default props => {
     onRequestClose={() => {
       Alert.alert('Modal has been closed.');
     }}>
-
       <View style={styles.modal}>
         <View style={styles.cardContainer}>
           <View style={styles.cardContent}>
