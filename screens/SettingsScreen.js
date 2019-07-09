@@ -51,10 +51,6 @@ class SettingsScreen extends Component {
   }
 }
 
-SettingsScreen.navigationOptions = {
-  title: 'Settings',
-};
-
 const mapStateToProps = state => {
   return { profile, typePreference, ageRange} = state.user.userSettings;
 };

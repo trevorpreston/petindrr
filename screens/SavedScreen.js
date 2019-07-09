@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Image, ScrollView, StyleSheet, Text, AsyncStorage, View, TouchableHighlight, TouchableOpacity, Modal } from 'react-native';
-import { withNavigationFocus } from "react-navigation";
+import { withNavigationFocus } from 'react-navigation';
+
+import DetailsModal from '../components/DetailsModal'
 
 class SavedScreen extends Component {
   constructor(props) {
@@ -11,6 +13,8 @@ class SavedScreen extends Component {
       modalVisible: false,
       selectedIndex: null
     }
+
+    this.updateModal = this.updateModal.bind(this);
   }
 
   componentDidMount() {
@@ -18,6 +22,7 @@ class SavedScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // refresh saved pets every time we navigate to the "Saved" sreen:
     if (prevProps.isFocused !== this.props.isFocused) {
       this.fetchSaved();
     }
@@ -28,11 +33,8 @@ class SavedScreen extends Component {
       const saved = JSON.parse(await AsyncStorage.getItem('saved'));
       this.setState({
         saved: saved
-      }, () => {
-        console.log('state updated to ', this.state.saved)
       })
-
-    } catch (error) {
+    } catch(error) {
         console.log(error)
     }
   }
@@ -42,25 +44,13 @@ class SavedScreen extends Component {
   }
 
   renderDetails() {
-    let selectedPet = this.state.saved[this.state.selectedIndex]
+    let selectedPet = this.state.saved[this.state.selectedIndex];
     return (
-      <Modal
-      transparent={false}
-      visible={this.state.modalVisible}
-      style={{height: 50, width: 100, backgroundColor: 'black', marginTop: 20}}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}>
-      <Text>I AM THE MODAL</Text>
-      <View>
-        <Image source={{uri: selectedPet.img}} style={{height: 200, width: 200}}/>
-        <Text>{selectedPet.name} , {selectedPet.age} yr, {selectedPet.sex}</Text>
-        <Text>{selectedPet.profile}</Text>
-      </View>
-      <TouchableOpacity onPress={() => this.updateModal(false, null)}>
-        <Text>Close</Text>
-      </TouchableOpacity>
-      </Modal>
+      <DetailsModal 
+        modalVisible={this.state.modalVisible} 
+        selectedPet={selectedPet}
+        updateModal={this.updateModal}
+      />
     )
   }
 
@@ -70,7 +60,7 @@ class SavedScreen extends Component {
           <TouchableHighlight 
             key={i} 
             onPress={() => this.updateModal(true, i)}
-            underlayColor="white">
+            underlayColor='white'>
             <View>
               <Image source={{uri: save.img}} style={{height: 200, width: 200}}/>
               <Text>{save.name} , {save.age} yr, {save.sex}</Text>
@@ -84,17 +74,12 @@ class SavedScreen extends Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Text>SAVED SCREEN</Text>
         {this.state.saved && this.renderSaved()}
         {this.state.modalVisible && this.renderDetails()}
       </ScrollView>
     );
   }
 }
-
-SavedScreen.navigationOptions = {
-  title: 'Saved',
-};
 
 export default withNavigationFocus(SavedScreen);
 

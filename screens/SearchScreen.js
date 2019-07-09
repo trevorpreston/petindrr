@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Animated, Dimensions, Image, PanResponder, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Animated, Dimensions, Image, PanResponder, AsyncStorage, Text, ScrollView } from 'react-native';
 
 import { connect } from 'react-redux';
 import { fetchInitialPets } from '../reducers/petReducer';
@@ -13,6 +13,8 @@ export class SearchScreen extends Component {
     this.state = {
         currentIndex: 0
     }
+
+    /* Configure Animate instance: */
     this.position = new Animated.ValueXY();
     this.rotate = this.position.x.interpolate({
         inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -43,7 +45,9 @@ export class SearchScreen extends Component {
 
   componentDidMount() {
     this.props.fetchInitialPets();
-    this.clearSaved();
+    // NOTE: for testing purposes, the cache is cleared when the phone is booted up.  
+    // Comment out the line below if you want data to persist across sessions:
+    this.clearSaved();  
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
@@ -78,6 +82,7 @@ export class SearchScreen extends Component {
       }})
   }
 
+  /* saving */
   async clearSaved() {
     try {
       await AsyncStorage.removeItem('saved');
@@ -107,6 +112,7 @@ export class SearchScreen extends Component {
       } )
   }
 
+  /* Rendering: */
   renderCards(pets) {
     return pets.map( (pet, key) => {
       if (key < this.state.currentIndex) {
@@ -124,18 +130,15 @@ export class SearchScreen extends Component {
         <Animated.View
             {...this.PanResponder.panHandlers}
             key={key}
-            style={[this.rotateAndTranslate,
-              {
-                height: SCREEN_HEIGHT - 120,
-                width: SCREEN_WIDTH,
-                padding: 10,
-                position: "absolute"
-              }
-            ]}
+            style={[this.rotateAndTranslate, styles.card]}
           >
           <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+              style={styles.cardImage}
               source={{uri: item.img}} />
+          <Text>{item.name} , {item.age} yr, {item.sex}</Text>
+          <ScrollView>
+            <Text>{item.profile}</Text>
+          </ScrollView>
         </Animated.View>
     )
   }
@@ -147,27 +150,23 @@ export class SearchScreen extends Component {
       style={[{
         opacity: this.nextCardOpacity,
         transform: [{ scale: this.nextCardScale }],
-        height: SCREEN_HEIGHT - 120, width: SCREEN_WIDTH, padding: 10, position: 'absolute'
-        }]}
+        }, styles.card]}
     >
       <Image
-        style={{
-          flex: 1,
-          height: null,
-          width: null,
-          resizeMode: "cover",
-          borderRadius: 20
-        }}
+        style={styles.cardImage}
         source={{uri: item.img}}
       />
+      <Text>{item.name} , {item.age} yr, {item.sex}</Text>
+      <ScrollView>
+        <Text>{item.profile}</Text>
+      </ScrollView>
     </Animated.View>
     )
   }
 
-
   render() {
     return (
-        <View style={styles.container}>
+        <View>
           {this.props.pets && this.renderCards(this.props.pets) }
         </View>
     );
@@ -175,9 +174,25 @@ export class SearchScreen extends Component {
 }
 
 
-SearchScreen.navigationOptions = {
-  title: 'Search',
-};
+
+const styles = StyleSheet.create({
+  card: {
+    height: SCREEN_HEIGHT - 120,
+    width: SCREEN_WIDTH,
+    padding: 10,
+    position: "absolute",
+    backgroundColor: 'white'
+  },
+
+  cardImage: {
+    flex: 1,
+    height: null,
+    width: null,
+    resizeMode: "cover",
+    borderRadius: 20
+  }
+});
+
 
 const mapStateToProps = state => {
   return { pets } = state.pet
@@ -185,11 +200,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   fetchInitialPets: () => dispatch(fetchInitialPets()),
-});
-
-
-const styles = StyleSheet.create({
- 
 });
 
 
