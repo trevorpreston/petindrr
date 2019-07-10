@@ -132,13 +132,7 @@ export class SearchScreen extends Component {
             key={key}
             style={[this.rotateAndTranslate, styles.card]}
           >
-          <Image
-              style={styles.cardImage}
-              source={{uri: item.img}} />
-          <Text>{item.name} , {item.age} yr, {item.sex}</Text>
-          <ScrollView>
-            <Text>{item.profile}</Text>
-          </ScrollView>
+          {this.renderCard(item)}
         </Animated.View>
     )
   }
@@ -152,15 +146,23 @@ export class SearchScreen extends Component {
         transform: [{ scale: this.nextCardScale }],
         }, styles.card]}
     >
-      <Image
-        style={styles.cardImage}
-        source={{uri: item.img}}
-      />
-      <Text>{item.name} , {item.age} yr, {item.sex}</Text>
-      <ScrollView>
-        <Text>{item.profile}</Text>
-      </ScrollView>
+      {this.renderCard(item)}
     </Animated.View>
+    )
+  }
+
+  renderCard(item) {
+    return (
+      <View style={{flex: 1}}>
+        <Image
+          style={styles.cardImage}
+          source={{uri: item.img}}
+        />
+        <Text>{item.name} , {item.age} yr, {item.sex}</Text>
+        <ScrollView>
+          <Text>{item.profile}</Text>
+        </ScrollView>
+      </View>
     )
   }
 
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT - 120,
     width: SCREEN_WIDTH,
     padding: 10,
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: 'white'
   },
 
@@ -188,8 +190,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: null,
     width: null,
-    resizeMode: "cover",
-    borderRadius: 20
+    resizeMode: 'cover',
   }
 });
 
