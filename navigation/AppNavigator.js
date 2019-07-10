@@ -6,5 +6,11 @@ import MainTabNavigator from './MainTabNavigator';
 export default createAppContainer(
   createSwitchNavigator({
     Main: MainTabNavigator,
+  }, {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: 'black'
+      }
+    }
   })
 );

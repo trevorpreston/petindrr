@@ -6,10 +6,15 @@ import SearchScreen from '../screens/SearchScreen';
 import SavedScreen from '../screens/SavedScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-const config = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
-});
+const config = {
+  defaultNavigationOptions: {
+    headerStyle: {
+      borderBottomWidth: 0,
+      shadowColor: 'transparent',
+      height: 10
+    }
+  }
+}
 
 const SearchStack = createStackNavigator(
   {
@@ -22,7 +27,7 @@ const SearchStack = createStackNavigator(
 SearchStack.path = '';
 
 SearchStack.navigationOptions = {
-  tabBarLabel: 'Search',
+  tabBarLabel: 'Search'
 };
 
 const SavedStack = createStackNavigator(
@@ -52,11 +57,29 @@ SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
 };
 
+const options = {
+  showIcon: false,
+  activeBackgroundColor: '#d6d7da',
+  style: {
+    alignItems: 'center',
+    shadowColor: 'transparent',
+    borderTopWidth: 0,
+    width: 300,
+    alignSelf: 'center'
+  },
+  tabStyle: {
+    padding: 4
+  },
+  labelStyle: {
+    fontSize: 18,
+  },
+}
+
 const tabNavigator = createBottomTabNavigator({
   SearchStack,
   SavedStack,
   SettingsStack,
-});
+}, { tabBarOptions: options } );
 
 tabNavigator.path = '';
 

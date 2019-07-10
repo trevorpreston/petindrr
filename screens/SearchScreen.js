@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Animated, Dimensions, Image, PanResponder, AsyncStorage, Text, ScrollView } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchInitialPets } from '../reducers/petReducer';
+import { fetchInitialPets } from '../actions/petActions';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -80,6 +80,12 @@ export class SearchScreen extends Component {
              }).start()
           }
       }})
+  }
+
+  static navigationOptions = {
+    cardStyle: {
+      backgroundColor: 'black'
+    }
   }
 
   /* saving */

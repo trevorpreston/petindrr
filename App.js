@@ -1,12 +1,11 @@
-import * as Font from 'expo-font';
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import axios from 'axios';
 import axiosMiddleware from 'redux-axios-middleware';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -36,7 +35,7 @@ export default function App(props) {
   return (
     <Provider store={store}>
       <View style={styles.container}>
-        <AppNavigator />
+        <AppNavigator/>
       </View>
     </Provider>
   );
@@ -50,5 +49,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    borderWidth: 0
   },
 });

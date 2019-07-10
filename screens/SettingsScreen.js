@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, ScrollView, View, TextInput, Switch, StyleSheet} from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchInitialSettings, updateProfile, updateMinAge, updateMaxAge, togglePetPreference } from '../reducers/userReducer';
+import { fetchInitialSettings, updateProfile, updateMinAge, updateMaxAge, togglePetPreference } from '../actions/userActions';
 
 
 class SettingsScreen extends Component {
@@ -41,7 +41,7 @@ class SettingsScreen extends Component {
             <Text>Age</Text>
             <View style={styles.ageWrapper}>
               <TextInput
-                value={ this.props.ageRange.min === 0 ? 'min': this.props.ageRange.min.toString()}
+                value={this.props.ageRange.min.toString()}
                 style={styles.ageInput}
                 editable={true}
                 onChangeText={text => this.props.updateMinAge(text)}
@@ -49,7 +49,7 @@ class SettingsScreen extends Component {
                 keyboardType={'numeric'}
                 />
               <TextInput
-                value={this.props.ageRange.max === 0 ? 'max' : this.props.ageRange.max.toString()}
+                value={this.props.ageRange.max.toString()}
                 style={styles.ageInput}
                 editable={true}
                 onChangeText={text => this.props.updateMaxAge(text)}
