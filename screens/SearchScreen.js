@@ -158,8 +158,8 @@ export class SearchScreen extends Component {
           style={styles.cardImage}
           source={{uri: item.img}}
         />
-        <Text>{item.name} , {item.age} yr, {item.sex}</Text>
-        <ScrollView>
+        <Text style={styles.petHeader}>{item.name} , {item.age} yr, {item.sex}</Text>
+        <ScrollView style={styles.profile}>
           <Text>{item.profile}</Text>
         </ScrollView>
       </View>
@@ -191,6 +191,17 @@ const styles = StyleSheet.create({
     height: null,
     width: null,
     resizeMode: 'cover',
+  },
+
+  petHeader: {
+    fontSize: 22,
+    padding: 4
+  },
+  
+  profile: {
+    borderWidth: 1,
+    borderColor: '#d6d7da',
+    padding: 4
   }
 });
 
