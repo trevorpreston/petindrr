@@ -17,7 +17,6 @@ export function updateProfile(value) {
 }
 
 export function updateMinAge(value) {
-  console.log('value', value)
   return {
     type: 'UPDATE_MIN_AGE',
     payload: value

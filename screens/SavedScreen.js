@@ -94,7 +94,9 @@ const styles = StyleSheet.create({
   },
 
   savedCard: {
-    backgroundColor: '#e6e6e6',
+    borderWidth: 1,
+    borderColor: '#d6d7da',
+    borderRadius: 1,
     padding: 5,
     margin: 5
   },

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, ScrollView, View, TextInput, Switch, StyleSheet} from 'react-native';
+import { Text, ScrollView, View, TextInput, Switch, StyleSheet, Keyboard, TouchableWithoutFeedback} from 'react-native';
 
 import { connect } from 'react-redux';
 import { fetchInitialSettings, updateProfile, updateMinAge, updateMaxAge, togglePetPreference } from '../actions/userActions';
@@ -12,54 +12,57 @@ class SettingsScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.profileWrapper}>
-          <Text style={styles.header}>Adopter Profile</Text>
-          <TextInput 
-            value={this.props.profile}
-            editable={true}
-            multiline={true}
-            onChangeText={text => this.props.updateProfile(text)}
-            style={styles.profile}/>
-        </View>
-        <View style={styles.detailsContainer}>
-          <Text style={styles.header}>Preferences</Text>
-          <View style={styles.detailsWrapper}>
-            <Text>Animal</Text>
-            <View style={styles.switchWrapper}>
-              <Text>Cat</Text>
-              <Switch
-                value={this.props.typePreference === 'dog' ? true: false}
-                onValueChange={(val) => { val === true ? this.props.togglePetPreference('dog') : this.props.togglePetPreference('cat')}}
-                disabled={false}
-                style={{margin: 6}}
-              />
-              <Text>Dog</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container} >
+          <View style={styles.profileWrapper}>
+            <Text style={styles.header}>Adopter Profile</Text>
+            <TextInput 
+              value={this.props.profile}
+              editable={true}
+              multiline={true}
+              onChangeText={text => this.props.updateProfile(text)}
+              style={styles.profile}
+              keyboardShouldPersistTaps={'handled'}/>
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.header}>Preferences</Text>
+            <View style={styles.detailsWrapper}>
+              <Text>Animal</Text>
+              <View style={styles.switchWrapper}>
+                <Text>Cat</Text>
+                <Switch
+                  value={this.props.typePreference === 'dog' ? true: false}
+                  onValueChange={(val) => { val === true ? this.props.togglePetPreference('dog') : this.props.togglePetPreference('cat')}}
+                  disabled={false}
+                  style={{margin: 6}}
+                />
+                <Text>Dog</Text>
+              </View>
+            </View>
+            <View style={styles.detailsWrapper}>
+              <Text>Age</Text>
+              <View style={styles.ageWrapper}>
+                <TextInput
+                  value={this.props.ageRange.min.toString()}
+                  style={styles.ageInput}
+                  editable={true}
+                  onChangeText={text => this.props.updateMinAge(text)}
+                  onBlur={() => {this.props.ageRange.min === '' && this.props.updateMinAge(0)}}
+                  keyboardType={'numeric'}
+                  />
+                <TextInput
+                  value={this.props.ageRange.max.toString()}
+                  style={styles.ageInput}
+                  editable={true}
+                  onChangeText={text => this.props.updateMaxAge(text)}
+                  onBlur={() => {this.props.ageRange.max === '' && this.props.updateMaxAge(0)}}
+                  keyboardType={'numeric'}
+                  />
+              </View>
             </View>
           </View>
-          <View style={styles.detailsWrapper}>
-            <Text>Age</Text>
-            <View style={styles.ageWrapper}>
-              <TextInput
-                value={this.props.ageRange.min.toString()}
-                style={styles.ageInput}
-                editable={true}
-                onChangeText={text => this.props.updateMinAge(text)}
-                onBlur={() => {this.props.ageRange.min === '' && this.props.updateMinAge(0)}}
-                keyboardType={'numeric'}
-                />
-              <TextInput
-                value={this.props.ageRange.max.toString()}
-                style={styles.ageInput}
-                editable={true}
-                onChangeText={text => this.props.updateMaxAge(text)}
-                onBlur={() => {this.props.ageRange.max === '' && this.props.updateMaxAge(0)}}
-                keyboardType={'numeric'}
-                />
-            </View>
-          </View>
-        </View>
       </View>
+    </TouchableWithoutFeedback>
     )
   }
 }

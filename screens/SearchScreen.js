@@ -207,7 +207,9 @@ const styles = StyleSheet.create({
   profile: {
     borderWidth: 1,
     borderColor: '#d6d7da',
-    padding: 4
+    padding: 4,
+    flex: 1,
+    marginBottom: 30
   }
 });
 
