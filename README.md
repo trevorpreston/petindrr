@@ -13,7 +13,7 @@
 2.  CommandLine: `npm install` to retrieve node dependencies
 3.  Device: On a mobile device install the `Expo` app from the App Store or Play Store.  (thumbnail has a white background with black logo)
 4.  CommandLine: run `expo start` - this will open up a browser tab.  
-5.  Device:  Scan either the QR code in the browser or in the command line.  This will automatically open expo and start up PeTindrr.
+5.  Device:  Scan either the QR code in the browser or in the command line.  This will automatically open expo and start up PeTindrr.  On iOS: use the normal 'camera' app to scan the code, on Android use a QR scanner of your choice.
 6.  Start swiping!
 
 ## Replacing the API origin:
